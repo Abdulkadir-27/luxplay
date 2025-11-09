@@ -1,259 +1,235 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>luxplay</title>
-    <link rel="icon" type="image/png" href="X.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LUXPLAY — Trendyol Bağlantılı Demo</title>
+  <link rel="icon" href="X.png" type="image/png">
+  <meta name="description" content="LUXPLAY — Trendyol'a yönlendiren modern demo e-ticaret arayüzü.">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --gold: #ffd400;
+      --gold-dark: #bfa200;
+      --bg: #050505;
+      --panel: rgba(255,255,255,0.03);
+      --glass: rgba(255,255,255,0.05);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{height:100%;margin:0;padding-bottom:120px;overflow-x:hidden;font-family:'Poppins',sans-serif;color:var(--gold);background:radial-gradient(circle at top, #000 0%, #040404 50%, #080808 100%);}
+    a{text-decoration:none;color:var(--gold);transition:all .25s ease;}
+
+    /* ---------- Header ---------- */
+    header.appbar{
+      position:sticky;top:0;z-index:100;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(0,0,0,0.25));
+      border-bottom: 1px solid rgba(255,215,0,0.12);
+      padding:12px 18px;
+      display:flex;align-items:center;gap:16px;
+      box-shadow: 0 4px 30px rgba(255,215,0,0.05);
+    }
+    .brand{display:flex;align-items:center;gap:12px;}
+    .brand img{width:56px;height:56px;border-radius:12px;box-shadow:0 0 20px rgba(255,215,0,0.25);}
+    .brand h1{font-size:22px;margin:0;letter-spacing:2px;color:var(--gold);text-shadow:0 0 12px rgba(255,215,0,0.4);}
+
+    /* ---------- Header icons (kalp & sepet) ---------- */
+    header.appbar div > a {
+      font-size:28px;
+      padding:6px 8px;
+      transition: all 0.25s ease;
+    }
+    header.appbar div > a:hover {
+      transform: scale(1.3);
+      color: var(--gold-dark);
+      text-shadow: 0 0 12px rgba(255,215,0,0.4);
+    }
+
+    /* ---------- Search ---------- */
+    .search-wrap{flex:1;display:flex;align-items:center;gap:12px;}
+    .search{display:flex;align-items:center;background:var(--glass);border-radius:40px;padding:8px 12px;gap:8px;transition:all 0.3s ease;}
+    .search:hover{background:rgba(255,255,255,0.08);}
+    .search input{all:unset;flex:1;padding:10px 8px;color:#fff;font-size:15px;}
+    .search button{background:var(--gold);border:none;padding:10px 16px;border-radius:28px;font-weight:700;cursor:pointer;transition:all .25s ease;}
+    .search button:hover{background:var(--gold-dark);}
+
+    /* ---------- Categories ---------- */
+    .cats{display:flex;gap:10px;overflow:auto;padding:12px 18px;}
+    .chip{flex:0 0 auto;background:rgba(255,255,255,0.03);padding:8px 16px;border-radius:999px;border:1px solid rgba(255,215,0,0.12);cursor:pointer;transition:all .3s;}
+    .chip:hover{background:rgba(255,215,0,0.1);transform:scale(1.06);}
+    .chip a{color:var(--gold);text-decoration:none;font-weight:700;}
+
+    /* ---------- Hero ---------- */
+    .hero{max-width:1100px;margin:30px auto;padding:32px;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.06));box-shadow:0 20px 80px rgba(255,200,0,0.08);transition:transform .3s;}
+    .hero:hover{transform:translateY(-4px);}
+    .hero-inner{display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+    .logo-box img{width:140px;height:140px;border-radius:16px;box-shadow:0 10px 40px rgba(255,200,0,0.18);}
+    .hero-title h2{font-size:44px;margin:0;color:var(--gold);text-shadow:0 0 25px rgba(255,215,0,0.3);}
+    .hero-title p{margin-top:10px;color:#ffed99;}
+    .hero-actions{display:flex;gap:12px;margin-top:16px;}
+    .btn{background:var(--gold);padding:12px 22px;border-radius:999px;border:none;font-weight:800;cursor:pointer;color:#111;transition:all .3s;}
+    .btn:hover{transform:translateY(-3px) scale(1.05);filter:brightness(1.2);box-shadow:0 12px 50px rgba(255,200,0,0.25);}
+    .hero-actions .btn[style]{transition:all 0.3s ease;}
+    .hero-actions .btn[style]:hover{transform:translateY(-3px) scale(1.05);background:rgba(255,215,0,0.15);color:var(--gold);box-shadow:0 10px 40px rgba(255,200,0,0.2);}
+
+    /* ---------- Product Grid ---------- */
+    .container{max-width:1200px;margin:18px auto;padding:0 18px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.1));
+      padding:14px;border-radius:18px;
+      box-shadow:0 18px 60px rgba(255,200,0,0.06);
+      display:flex;flex-direction:column;
+      transition:all .3s ease;
+    }
+    .card:hover{transform:translateY(-6px);box-shadow:0 25px 80px rgba(255,200,0,0.1);}
+    .card img{width:100%;height:200px;object-fit:cover;border-radius:12px;}
+    .card .title{font-weight:800;margin-top:10px;color:#fff;font-size:16px;}
+    .card .price{margin-top:6px;font-weight:900;color:var(--gold);font-size:15px;}
+    .card .meta{margin-top:6px;color:#c9b36a;font-size:13px;}
+    .card .actions{margin-top:auto;display:flex;gap:8px;}
+    .card a{flex:1;text-align:center;padding:10px;border-radius:12px;font-weight:700;transition:all .25s;}
+    .go{background:var(--gold);color:#111;}
+    .go:hover{background:var(--gold-dark);}
+    .fav{background:transparent;border:1px solid rgba(255,215,0,0.2);color:var(--gold);}
+    .fav:hover{background:rgba(255,215,0,0.08);}
+
+    /* ---------- Banner ---------- */
+    .banner{margin:30px auto;border-radius:18px;padding:20px;background:linear-gradient(90deg, rgba(255,215,0,0.05), rgba(255,255,255,0.03));display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 10px 50px rgba(255,200,0,0.06);flex-wrap:wrap;}
+
+    /* ---------- Footer ---------- */
+    footer.site{max-width:1200px;margin:40px auto;padding:18px;border-radius:12px;text-align:center;color:#d8b84a;font-size:14px;}
+    footer a:hover{text-decoration:underline;}
+
+    /* ---------- Bottom Nav ---------- */
+    .bottom-nav{position:fixed;left:0;right:0;bottom:12px;display:flex;justify-content:space-around;gap:8px;padding:10px 12px;background:transparent;z-index:200;}
+    .bn-item{
+      background:linear-gradient(180deg,var(--gold),var(--gold-dark));
+      padding:10px;border-radius:999px;min-width:68px;text-align:center;font-weight:800;color:#111;
+      box-shadow:0 12px 40px rgba(255,200,0,0.12);
+      transition:all .3s;
+    }
+    .bn-item:hover{transform:translateY(-3px) scale(1.05);filter:brightness(1.2);box-shadow:0 12px 50px rgba(255,200,0,0.25);}
+
+    @media (max-width:600px){
+      .hero-title h2{font-size:30px;}
+      .logo-box img{width:110px;height:110px;}
+    }
+  </style>
 </head>
+
 <body>
-    <style>
-* {
-  margin: 0; padding: 0; box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  color: gold;
-  overflow-x: hidden;
-  background-color: #000;
-}
-
-video.bg-video {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -1;
-  opacity: 0.2;
-}
-
-header {
-  text-align: center;
-  padding: 60px 20px 30px 20px;
-  font-size: 3.2rem;
-  color: #FFD700;
-  text-shadow: 0 0 20px gold;
-}
-
-section.hayal {
-  max-width: 800px;
-  margin: 30px auto;
-  background: rgba(0,0,0,0.6);
-  padding: 30px;
-  border-radius: 25px;
-  box-shadow: 0 0 30px gold;
-  text-align: center;
-  font-size: 1.4rem;
-  line-height: 2.2;
-}
-
-.money-symbol {
-  font-size: 2rem;
-  animation: glow 2s infinite alternate;
-  color: #00ff88;
-}
-
-@keyframes glow {
-  from { text-shadow: 0 0 10px #00ff88; }
-  to { text-shadow: 0 0 30px #00ffaa; }
-}
-
-section.vitrin {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
-  margin: 60px auto;
-  max-width: 1100px;
-}
-
-section.vitrin img {
-  width: 160px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px gold;
-  transition: transform 0.4s ease;
-}
-
-section.vitrin img:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 40px gold;
-}
-
-footer {
-  text-align: center;
-  margin: 60px 0 40px;
-  color: #ffd700aa;
-  font-size: 1.1rem;
-  text-shadow: 0 0 10px #ffaa00aa;
-}
-
-button {
-  display: block;
-  margin: 30px auto;
-  padding: 16px 40px;
-  font-size: 1.2rem;
-  background: gold;
-  color: #000;
-  font-weight: bold;
-  border: none;
-  border-radius: 40px;
-  cursor: pointer;
-  box-shadow: 0 0 20px gold;
-}
-
-button:hover {
-  background: #ffaa00;
-}
-a{
-    color: gold;
-}
-.hayal-box {
-  max-width: 800px;
-  margin: 30px auto;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 30px;
-  border-radius: 25px;
-  box-shadow: 0 0 30px gold;
-  font-size: 1.4rem;
-  text-align: center;
-}
-
-form {
-  background-color: rgba(255, 255, 255, 0.05);
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px gold;
-  max-width: 600px;
-  margin: 40px auto;
-  color: gold;
-  font-size: 1.1rem;
-}
-input, textarea, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  margin-bottom: 20px;
-}
-input[type="submit"] {
-  background: gold;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-input[type="submit"]:hover {
-  background: #ffaa00;
-}
-.üst {
-    max-width: 800px;
-  margin: 30px auto;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 30px;
-  border-radius: 25px;
-  box-shadow: 0 0 30px gold;
-  font-size: 1.4rem;
-  text-align: center; 
-}
-.alt {
-     max-width: 1200px;  /* Genişliği artırdık */
-     margin: 30px auto;
-     background: rgba(255, 255, 255, 0.05);
-     padding: 30px;
-     border-radius: 25px;
-     box-shadow: 0 0 30px gold;
-     font-size: 1.4rem;
-     text-align: center;
-     display: flex;  /* Flex container */
-     flex-direction: row;  /* Yatay dizilim */
-     justify-content: center;  /* Yatay merkezleme */
-     gap: 20px;  /* Butonlar arası boşluk */
-     flex-wrap: wrap;  /* Responsive davranış için */
-}
-
-.button {
-     width: 200px;  /* Sabit genişlik */
-     margin: 0;  /* Margin'i kaldırdık */
-     background: gold;
-     padding: 15px;
-     border-radius: 25px;
-     box-shadow: 0 0 30px gold;
-     font-size: 1.4rem;
-     color: black;
-}
-  
-
-
-.buton2{
-    max-width: 800px;
-  margin: 30px auto;
-  background-color: gold;
-  padding: 30px;
-  border-radius: 25px;
-  box-shadow: 0 0 30px gold;
-  font-size: 1.4rem;
-  text-align: center;
-  color: black; 
-}
-.brand-img {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 0 12px gold;
-} 
- a {
-      text-decoration: none;
-      background: gold;
-      color: black;
-      padding: 18px 45px;
-      border-radius: 30px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      box-shadow: 0 0 25px gold;
-      transition: 0.3s;
-    }
-
-     a:hover {
-      background: #ffaa00;
-      color: white;
-      transform: scale(1.05);
-    }
-        .menu {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-       max-width: 800px;
- 
-    }
-    </style>
-    <div class="üst">
-
-<form action="https://www.trendyol.com/sr" method="GET" target="_blank">
-  <input type="text" name="q" placeholder="Ürün ara...">
-  <button type="submit">Ara</button>
-</form>
-
-        <div class="menu"><a href="https://www.trendyol.com/butik/liste/2/erkek">erkek</a></div>
-        <div class="menu"><a href="https://www.trendyol.com/butik/liste/1/kadin">kadın</a></div>
-        
+  <header class="appbar">
+    <div class="brand">
+      <img src="X.png" alt="luxplay logo">
+      <h1>LUXPLAY</h1>
     </div>
-    <div class="orta">
-        <header>
-<h1>LUXPLAY</h1>
-<img src="X.png" alt="luxplay logo" class="brand-img">
-</header>
+    <div class="search-wrap">
+      <form id="searchForm" class="search" onsubmit="return onSearch(event)">
+        <input id="q" name="q" type="search" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit">Ara</button>
+      </form>
     </div>
-    <div class="alt">
-<div class="menu"><a href="https://www.trendyol.com/">anasayfa</a></div>
-<div class="menu"><a href="https://tgoyemek.com/?utm_source=trendyolgo&utm_medium=referral&utm_campaign=CTA">luxplay flash</a></div>
-<div class="menu"><a href="https://www.trendyol.com/hesabim/favoriler">favoriler</a></div>
-<div class="menu"><a href="https://www.trendyol.com/sepet">sepetim</a></div>
-<div class="menu"><a href="https://www.trendyol.com/hesabim/siparislerim">hesabım</a></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <a href="https://www.trendyol.com/hesabim/favoriler" title="Favoriler">♡</a>
+      <a href="https://www.trendyol.com/sepet" title="Sepet">🛒</a>
     </div>
-    <footer><h1> © 2025 Tüm Hakları Saklıdır.sadece denemek amaclı yapılmıştır trendyolun kısaltmasıdır trendyoldan alınmıştır</h1></footer>
+  </header>
+
+  <nav class="cats">
+    <div class="chip"><a href="https://www.trendyol.com/butik/liste/2/erkek">Erkek</a></div>
+    <div class="chip"><a href="https://www.trendyol.com/butik/liste/1/kadin">Kadın</a></div>
+    <div class="chip"><a href="https://www.trendyol.com/elektronik">Elektronik</a></div>
+    <div class="chip"><a href="https://www.trendyol.com/ev--yasam">Ev & Yaşam</a></div>
+    <div class="chip"><a href="https://www.trendyol.com/s/trendyol-indirim-gunleri">Fırsatlar</a></div>
+  </nav>
+
+  <section class="hero container">
+    <div class="hero-inner">
+      <div class="logo-box"><img src="X.png" alt="luxplay"></div>
+      <div class="hero-title">
+        <h2>LUXPLAY — Trendyol ile Bağlantılı Mağaza</h2>
+        <p>Arama yapın, kategori seçin veya fırsatları keşfedin. Tüm ürünler Trendyol'da açılır.</p>
+        <div class="hero-actions">
+          <button class="btn" onclick="openTrending()">Günün Fırsatları</button>
+          <button class="btn" style="background:transparent;border:2px solid rgba(255,215,0,0.25);color:var(--gold)" onclick="openFavorites()">Favorilerim</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="banner">
+      <div style="display:flex;gap:12px;align-items:center">
+        <img src="X.png" alt="brand" style="width:96px;height:96px;border-radius:12px">
+        <div>
+          <div style="font-weight:900;color:#fff">LUXPLAY Özel</div>
+          <div style="color:#ffd700cc">Trendyol'dan seçilen günlük fırsatlar burada.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+      <a class="btn" href="https://www.trendyol.com/">Alışverişe Başla</a>
+        <a class="btn" href="https://www.trendyol.com/s/trendyol-indirim-gunleri">Fırsatları Gör</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <h3 style="color:#fff;margin-bottom:12px;font-weight:700;">Popüler Ürünler</h3>
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <footer class="site">
+    <strong style="color:#fff">LUXPLAY</strong> — Demo arayüz <br>
+    <a href="https://www.trendyol.com/yardim/v2">Yardım</a> • 
+    <a href="https://www.trendyol.com/cerez_politikasi">Gizlilik</a> • 
+    <a href="#">İletişim</a><br>
+    <small>© 2025 LUXPLAY — Trendyol içerikleri Trendyol'a aittir.</small>
+  </footer>
+
+  <nav class="bottom-nav">
+    <a class="bn-item" href="https://www.trendyol.com/">Ana Sayfa</a>
+     <a class="bn-item" href="https://tgoyemek.com/">LUXPLAY Flash</a>
+    <a class="bn-item" href="https://www.trendyol.com/hesabim/favoriler">Favoriler</a>
+    <a class="bn-item" href="https://www.trendyol.com/sepet">Sepet</a>
+    <a class="bn-item" href="https://www.trendyol.com/hesabim/siparislerim">Hesabım</a>
+  </nav>
+
+  <script>
+    const products = [
+      {title:'Xiaomi Redmi 13 — 8GB / 256GB',price:'8.849 TL',img:'https://cdn.dsmcdn.com/ty286/product/media/images/202203/20/40868833/3/3_org_zoom.jpg',url:'https://www.trendyol.com/xiaomi/xiaomi-redmi-13-8-gb-256-gb-p-123456?m=example'},
+      {title:'MSI Titan 18" — Gaming Laptop',price:'380.499 TL',img:'https://cdn.dsmcdn.com/ty123/product/media/images/202208/13/1111111/1/1_org_zoom.jpg',url:'https://www.trendyol.com/msi/msi-titan-18-p-654321?m=example'},
+      {title:'Adidas Spor Ayakkabı',price:'1.999 TL',img:'https://cdn.dsmcdn.com/ty341/product/media/images/202110/11/222222/2/2_org_zoom.jpg',url:'https://www.trendyol.com/adidas/adidas-spor-ayakkabi-p-987654?m=example'},
+      {title:'Kadın Elbise — Yazlık',price:'699 TL',img:'https://cdn.dsmcdn.com/ty412/product/media/images/202205/55/444444/5/5_org_zoom.jpg',url:'https://www.trendyol.com/kadin-elbise-p-564738?m=example'},
+      {title:'Kablosuz Kulaklık — Bluetooth 5.3',price:'499 TL',img:'https://cdn.dsmcdn.com/ty132/product/media/images/202202/66/555555/6/6_org_zoom.jpg',url:'https://www.trendyol.com/kulaklik-p-111222?m=example'}
+    ];
+
+    const grid = document.getElementById('grid');
+    products.forEach(p=>{
+      grid.innerHTML += `
+        <article class="card">
+          <img loading="lazy" src="${p.img}" alt="${p.title}">
+          <div class="title">${p.title}</div>
+          <div class="price">${p.price}</div>
+          <div class="meta">Puan: ★★★★☆</div>
+          <div class="actions">
+            <a class="fav" href="https://www.trendyol.com/hesabim/favoriler" target="_blank">Favori</a>
+            <a class="go" href="${p.url}" target="_blank">Trendyol'da Gör</a>
+          </div>
+        </article>`;
+    });
+
+    function onSearch(e){
+      e.preventDefault();
+      const q = document.getElementById('q').value.trim();
+      if(q) window.open('https://www.trendyol.com/sr?q='+encodeURIComponent(q),'_blank');
+      return false;
+    }
+    function openTrending(){window.open('https://www.trendyol.com/super-indirim','_blank');}
+    function openFavorites(){window.open('https://www.trendyol.com/hesabim/favoriler','_blank');}
+  </script>
 </body>
 </html>
